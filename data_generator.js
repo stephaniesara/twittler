@@ -46,10 +46,12 @@ var generateRandomTweet = function(){
   addTweet(tweet);
 };
 
+// This sets up the intial 10 tweets
 for(var i = 0; i < 10; i++){
   generateRandomTweet();
 }
 
+// This adds new tweets one at a time at random time intervals
 var scheduleNextTweet = function(){
   generateRandomTweet();
   setTimeout(scheduleNextTweet, Math.random() * 1500);

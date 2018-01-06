@@ -12,179 +12,115 @@
 
 <body>
 
-
-
   <header>
     <h1>Twittler</h1>
   </header>
 
-  <!--<btn type='btn'>Click to see your Twittler feed...</btn>-->
-  <a class='btn refresh'>Click to refresh your feed...</a>
+  <a class='btn refresh'>Click to refresh your feed</a>
   <section class='feed'></section>
-  <!--<h3 class='username'></h3>-->
 
   <script>
 
+  // Keep track of how many new tweets in the feed
+  var prevTweets, currTweets = streams.home.length;
 
-  var $body = $('.body');
-  $body.html('');
+  // Helper functions to show different elements of feed
+  function displayUsername(username) {
+    var $username = $('<h3>' + '@' + username + '</h3>');
+    $('.feed').append($username);
+  }
 
-  // To keep track of how many new tweets the user can see in the feed
-  var prevTweets = streams.home.length - 1;
-  var currTweets = prevTweets;
+  function displayMessage(message) {
+    var $message = $('<h5>' + message + '</h5>');
+    $('.feed').append($message);
+  }
 
-  // To keep track of whether the user has initiated the feed
-  var initiated = false;
+  function displayTime(timestamp) {
+    var minutesAgo = Math.floor((new Date() - timestamp) / 1000 / 60);
+    var $time = $('<p>' + minutesAgo + ' min ago - ' + timestamp + '<br />' + '<br />' + '</p>');
+    $('.feed').append($time);
+  }
 
-  //$(document).ready(function(){
+  function resetTweetCount() {
+    prevTweets = currTweets;
+    currTweets = streams.home.length;
+  }
 
+  // Display feed with all tweets
   function displayTweets() {
+    resetTweetCount();
     var $feed = $('.feed');
     $feed.html('');
     var index = streams.home.length - 1;
     while(index >= 0){
       var tweet = streams.home[index];
-      // var username = tweet.user;
-      // var message = tweet.message;
-      // var timestamp = tweet.created_at;
-      // var minutesAgo = Math.floor((new Date() - timestamp) / 1000 / 60);
-      // $('.feed').append('<h3>' + '@' + username + '</h3>');
-      // $('.feed').append('<h5>' + message + '</h5>');
-      // $('.feed').append('<p>' + minutesAgo + ' min ago - ' + timestamp + '<br />' + '<br />' + '</p>');
-
-      var $username = $('<h3>' + '@' + tweet.user + '</h3>');
-      var $message = $('<h5>' + tweet.message + '</h5>');
-      var timestamp = tweet.created_at;
-      var minutesAgo = Math.floor((new Date() - timestamp) / 1000 / 60);
-      var $time = $('<p>' + minutesAgo + ' min ago - ' + timestamp + '<br />' + '<br />' + '</p>');
-      $('.feed').append($username);
-      $('.feed').append($message);
-      $('.feed').append($time);
-
-      //var $test = $('<btn>' + 'testbutton' + '</btn>');
-      //$('.body').addClass($test);
-    //  $('.body').append($test);
-      //$('.feed').remove($message);
-    //  $('.body').addClass($username);
-      //$('.body').append($('.testclass'));
-
+      displayUsername(tweet.user);
+      displayMessage(tweet.message);
+      displayTime(tweet.created_at);
       index -= 1;
-
-
-      // var $myNewElement = $('<span>Tyler McGinnis</span>')
-      // $('.some-class').html('<span>Tyler McGinnis</span>')
     }
   }
 
-displayTweets();
-    $( document ).on('click', '.refresh', function( event ) {
+  // Display feed with username's tweets
+  function displayUserProfile(username) {
+    resetTweetCount();
+    var $feed = $('.feed');
+    $feed.html('');
+    displayUsername(username);
+    //$('.feed').find('h3').css('color', '#1DA1F2');
+    var tweets = streams.users[username];
+    var index = tweets.length - 1;
+    while(index >= 0){
+      var tweet = tweets[index];
+      displayMessage(tweet.message);
+      displayTime(tweet.created_at);
+      index--;
+    }
+  }
 
-      // btn auto-refreshes every 1 sec for new tweets
-      // if (!initiated) {
-      //   initiated = true;
-      //   setInterval(function() {
-      //     currTweets = streams.home.length;
-      //     var diff = currTweets - prevTweets;
-      //     if (diff > 0) {
-      //       $('.refresh').text('Click to refresh your feed (' + diff + ')');
-      //     }
-      //   }, 1000);
-      // }
-      // // Resets the number of total tweets in feed
-      // prevTweets = currTweets;
+  // Initiate displaying feed for the first time
+  displayTweets();
 
-      // btn displays that feed is up to date
-      //$('.refresh').text('Click to refresh your Twittler feed');
+  // Refresh feed when user clicks button
+  $(document).on('click', '.refresh', function(  ) {
+    displayTweets();
+  });
 
-      displayTweets();
-      // Displays all the tweets in the feed
-
-    });
-//  });
-
-  // $(document).ready(function(){
-  //   $( '.testclass' ).on('click', function( event ) {
-  //     $('.refresh').text('hello');
-  //
-  //   });
-  // });
-  //
-  // $(document).ready(function(){
-  //   $('.feed').on('click', function() {
-  //     $('.refresh').text('hello');
-  //   });
-  // });
-
+  // Change button when hover over button
   $('.refresh').hover(
     function() {
-      currTweets = streams.home.length;
-      var diff = currTweets - prevTweets;
-      if (diff > 0) {
-        $('.refresh').text('Show ' + diff + ' new tweets');
-      }
-      //prevTweets = currTweets;
+      var diff = streams.home.length - currTweets;
+      $('.refresh').text('Show new tweets (' + diff + ')');
     },
     function() {
       $('.refresh').text('Click to refresh your feed...');
     }
   );
 
-  // $('.refresh').mouseenter(function(){
-  //   currTweets = streams.home.length;
-  //   var diff = currTweets - prevTweets;
-  //   if (diff > 0) {
-  //     $('.refresh').text('Click to refresh your feed (' + diff + ')');
-  //   }
-  //   prevTweets = currTweets;
-  // });
-  //
-  // $('.refresh').mouseleave(function(){
-  //   $('.refresh').text('Click to refresh your feed');
-  // });
-
-
+  // Display user profile when click on username
   $(document).on('click', 'h3', function(){
-    prevTweets = currTweets;
-    var username = ($(this).text()).substring(1);
-    $('.refresh').text('Showing all of ' + username + '\'s tweets');
-    //$('.refresh').text('Click to refresh your feed');
-
-
-    var $feed = $('.feed');
-    $feed.html('');
-
-    var $username = $('<h3>' + '@' + username + '</h3>');
-    $('.feed').append($username);
-
-    var userTweets = streams.users[username];
-    //var str;
-
-    for (var i = 0; i < userTweets.length; i++) {
-      var tweet = userTweets[i];
-    //  var tweet = streams.home[index];
-      var $message = $('<h5>' + tweet.message + '</h5>');
-      var timestamp = tweet.created_at;
-      var minutesAgo = Math.floor((new Date() - timestamp) / 1000 / 60);
-      var $time = $('<p>' + minutesAgo + ' min ago - ' + timestamp + '<br />' + '<br />' + '</p>');
-
-      $('.feed').append($message);
-      $('.feed').append($time);
-    }
-
-
-});
-
-$('.h3').hover(
-  function() {
-    $('.refresh').text('Show this persons new tweets');
-    //prevTweets = currTweets;
-  },
-  function() {
     $('.refresh').text('Click to refresh your feed...');
-  }
-);
+    var username = $(this).text().substring(1);
+    displayUserProfile(username);
+  });
 
+  // ARCHIVED CODE - for button that auto-updates with new tweet count
+  // btn auto-refreshes every 1 sec for new tweets
+  // if (!initiated) {
+  //   initiated = true;
+  //   setInterval(function() {
+  //     currTweets = streams.home.length;
+  //     var diff = currTweets - prevTweets;
+  //     if (diff > 0) {
+  //       $('.refresh').text('Click to refresh your feed (' + diff + ')');
+  //     }
+  //   }, 1000);
+  // }
+  // // Resets the number of total tweets in feed
+  // prevTweets = currTweets;
 
+  // btn displays that feed is up to date
+  //$('.refresh').text('Click to refresh your Twittler feed');
 
 
   </script>

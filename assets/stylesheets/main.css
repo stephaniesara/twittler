@@ -59,12 +59,16 @@ h1 {
   padding: 20px 0px 0px 0px;
 }
 
-h1, section {
+h1, .feed {
   margin: 10px 20px 10px 20px;
 }
 
 h3 {
   font-size: 90%;
+}
+
+h3:hover {
+  color: #1DA1F2;
 }
 
 h5 {
@@ -81,7 +85,13 @@ h3, h5, p {
   margin: 2px 0px 2px 0px;
 }
 
-.btn {
+.feed {
+  height: 80vh; /* feed is 80% of view height*/
+  width: 100vw - 40px;
+  overflow: auto;
+}
+
+.refresh {
   background-color: #e3e9ee; /* #1DA1F2; Twitter blue */
   border: 2px solid #e3e9ee;
   /*  border-radius: 25px;*/
@@ -98,30 +108,12 @@ h3, h5, p {
   /*outline: blue;*/
 }
 
-.btn:hover {
+.refresh:hover {
   background-color: #1DA1F2;
   border: 2px solid #1DA1F2;
   color: white;
 }
 
-h3:hover {
-  color: #1DA1F2;
-}
-
-.btn:focus {
+.refresh:focus {
   outline: 0;
 }
-
-.feed {
-  height: 80vh; /* feed is 80% of view height*/
-  width: 350px;
-  /*background-color: #1DA1F2;*/
-  overflow: auto;
-}
-
-/*.testclass {
-  height: 50px; /* feed is 80% of view height*/
-/*  background-color: #1DA1F2;
-  overflow: auto;
-}
-*/

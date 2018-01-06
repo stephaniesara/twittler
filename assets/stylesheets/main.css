@@ -47,9 +47,9 @@ table {
   border-spacing: 0;
 }
 
+/* CSS styling specific to Twittler */
+
 header {
-  /*background-color: #1DA1F2; // twitter color
-  padding: 5px;*/
   margin: 3px;
 }
 
@@ -59,13 +59,12 @@ h1 {
   padding: 20px 0px 0px 0px;
 }
 
-h1, div {
+h1, section {
   margin: 10px 20px 10px 20px;
 }
 
-
 h3 {
-  font-size: 70%;
+  font-size: 90%;
 }
 
 h5 {
@@ -82,8 +81,8 @@ h3, h5, p {
   margin: 2px 0px 2px 0px;
 }
 
-button {
-  background-color: #e3e9ee; /* #1DA1F2; /* Twitter blue */
+.btn {
+  background-color: #e3e9ee; /* #1DA1F2; Twitter blue */
   border: 2px solid #e3e9ee;
   /*  border-radius: 25px;*/
   color: grey;
@@ -91,27 +90,38 @@ button {
   padding: 5px 30px;
   margin: 0px 20px 0px 20px;
   text-align: center;
-  text-decoration: none;
+  /*text-decoration: none;*/
   display: inline-block;
   font-size: 12px;
-  width: 300px;
-  height: 30px;
+  width: 250px;
+  height: 13px;
   /*outline: blue;*/
 }
 
-button:hover {
-  background-color: #6c8698;
+.btn:hover {
+  background-color: #1DA1F2;
+  border: 2px solid #1DA1F2;
   color: white;
-  border: 2px solid #6c8698;
 }
 
-button:focus {
+h3:hover {
+  color: #1DA1F2;
+}
+
+.btn:focus {
   outline: 0;
 }
 
-div {
-  height: 80vh; /* twittler feed is 80% of view height*/
-  width: 500px;
+.feed {
+  height: 80vh; /* feed is 80% of view height*/
+  width: 350px;
   /*background-color: #1DA1F2;*/
   overflow: auto;
 }
+
+/*.testclass {
+  height: 50px; /* feed is 80% of view height*/
+/*  background-color: #1DA1F2;
+  overflow: auto;
+}
+*/
